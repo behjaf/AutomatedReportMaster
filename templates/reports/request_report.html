@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Request New Report</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="report_type" class="form-label">Report Type</label>
+                        <select class="form-select" id="report_type" name="report_type" required>
+                            <option value="sales">Sales Report</option>
+                            <option value="user_activity">User Activity Report</option>
+                            <option value="system_logs">System Logs Report</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="parameters" class="form-label">Parameters (Optional)</label>
+                        <textarea class="form-control" id="parameters" name="parameters" rows="3" 
+                                placeholder="Enter any additional parameters for the report"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Request Report</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

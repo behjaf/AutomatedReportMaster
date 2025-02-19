@@ -1,0 +1,41 @@
+services:
+  web:
+    build: .
+    command: gunicorn report_generator.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/app
+      - static_volume:/app/staticfiles
+      - report_volume:/app/reports/generated
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=0
+      - SECRET_KEY=your_production_secret_key
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=django-db
+    depends_on:
+      - redis
+      - celery
+
+  celery:
+    build: .
+    command: celery -A report_generator worker --loglevel=info
+    volumes:
+      - .:/app
+      - report_volume:/app/reports/generated
+    environment:
+      - DEBUG=0
+      - SECRET_KEY=your_production_secret_key
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=django-db
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+volumes:
+  static_volume:
+  report_volume:

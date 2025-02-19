@@ -1,0 +1,21 @@
+/* Custom styles to complement Bootstrap theme */
+.progress {
+    height: 20px;
+    background-color: var(--bs-gray-700);
+}
+
+.card {
+    border-color: var(--bs-gray-700);
+}
+
+.table {
+    --bs-table-bg: transparent;
+}
+
+.badge {
+    font-size: 0.9em;
+}
+
+.progress-bar {
+    transition: width 0.3s ease-in-out;
+}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<h2>Your Reports</h2>
+<div class="row mb-4">
+    <div class="col">
+        <a href="{% url 'request_report' %}" class="btn btn-primary">Request New Report</a>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Report Type</th>
+                <th>Status</th>
+                <th>Progress</th>
+                <th>Created</th>
+                <th>Completed</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in reports %}
+            <tr data-report-id="{{ report.id }}">
+                <td>{{ report.get_report_type_display }}</td>
+                <td>
+                    <span class="badge bg-{{ report.status|yesno:'success,warning,danger,secondary' }}">
+                        {{ report.get_status_display }}
+                    </span>
+                </td>
+                <td>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: {{ report.progress }}%">
+                            {{ report.progress }}%
+                        </div>
+                    </div>
+                </td>
+                <td>{{ report.created_at|date:"Y-m-d H:i:s" }}</td>
+                <td>{{ report.completed_at|date:"Y-m-d H:i:s"|default:"-" }}</td>
+                <td>
+                    {% if report.status == 'completed' %}
+                        <a href="{{ report.file_path }}" class="btn btn-sm btn-success" download>
+                            Download
+                        </a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
